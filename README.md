@@ -1,7 +1,3 @@
-Claro, aqui está o `README.md` pronto para ser inserido no GitHub, formatado em Markdown.
-
------
-
 # Gerador Automático de LLD para Cisco 9800
 
 Uma ferramenta de automação em Python que transforma a saída de diagnóstico (`show tech-support`) de uma controladora Cisco 9800 em um documento de Low-Level Design (LLD) completo e formatado em `.docx`.
@@ -36,7 +32,7 @@ O fluxo de trabalho do aplicativo é simples e direto:
 
 ## 🛠️ Tecnologias Utilizadas
 
-  - **Python 3**
+  - **Python 3.10**
   - **DocxTemplate (`docxtpl`)**: Para manipulação de templates `.docx` com Jinja2.
   - **Expressões Regulares (`re`)**: Para a extração precisa dos dados.
 
@@ -71,14 +67,7 @@ Siga os passos abaixo para configurar o ambiente e rodar o projeto.
     ```
 
 3.  **Instale as dependências:**
-    Crie um arquivo chamado `requirements.txt` com o seguinte conteúdo:
-
-    ```
-    docxtpl
-    ```
-
-    Em seguida, instale-o:
-
+   
     ```bash
     pip install -r requirements.txt
     ```
@@ -91,7 +80,7 @@ Siga os passos abaixo para configurar o ambiente e rodar o projeto.
     Acesse sua controladora Cisco 9800 e execute o comando abaixo para garantir que todas as informações (incluindo as sensíveis, como strings SNMP) sejam coletadas. Salve a saída em um arquivo de texto chamado `show_tech` na raiz do projeto.
 
     ```
-    show tech-support wireless no-sanitize
+    show tech-support wireless
     ```
 
 2.  **Prepare o Template (`LLD_Template.docx`):**
