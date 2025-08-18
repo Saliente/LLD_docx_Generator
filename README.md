@@ -1,39 +1,40 @@
-# Gerador Automático de LLD para Cisco 9800
+# Gerador Automático de LLD para Redes Cisco
 
-Uma ferramenta de automação em Python que transforma a saída de diagnóstico (`show tech-support`) de uma controladora Cisco 9800 em um documento de Low-Level Design (LLD) completo e formatado em `.docx`.
+Uma ferramenta de automação com interface gráfica (GUI) que transforma a saída de diagnóstico (`show tech-support`) de uma controladora Cisco 9800 em um documento de Low-Level Design (LLD) completo e formatado em `.docx`.
 
 -----
 
 ## 📄 Visão Geral
 
-Documentar a configuração de equipamentos de rede é uma tarefa demorada, repetitiva e suscetível a erros. Este script resolve esse problema ao automatizar completamente o processo para controladoras wireless Cisco 9800. Ele lê um arquivo `show tech`, extrai dezenas de parâmetros de configuração e os insere em um template Word pré-definido, gerando um LLD profissional em segundos.
+Documentar a configuração de equipamentos de rede é uma tarefa demorada, repetitiva e suscetível a erros. Este aplicativo resolve esse problema ao automatizar completamente o processo para controladoras wireless Cisco 9800, com uma interface gráfica intuitiva que guia o usuário. Ele lê um arquivo `show tech`, extrai dezenas de parâmetros de configuração e os insere em um template Word pré-definido, gerando um LLD profissional em segundos.
 
 -----
 
 ## ✨ Principais Funcionalidades
 
+  - **Interface Gráfica Amigável**: Construído com `CustomTkinter` para uma experiência de usuário moderna e simples.
+  - **Campos Dinâmicos**: A interface se adapta com base no tipo de equipamento selecionado, mostrando apenas as opções relevantes.
   - **Extração Abrangente de Dados**: Coleta informações sobre inventário, interfaces, WLANs, Tags (Policy, Site, RF), Perfis (Flex, RF, Policy) e muito mais.
   - **Automação via Template**: Utiliza a biblioteca `docxtpl` para preencher um template `.docx` com a sintaxe poderosa do Jinja2.
-  - **Estrutura Orientada a Objetos**: O código é organizado na classe `ShowTechWireless`, tornando-o modular e fácil de estender.
-  - **Economia de Tempo**: Reduz horas de trabalho manual para poucos segundos de execução de um script.
-  - **Padronização**: Garante que toda a documentação LLD siga um padrão consistente e de alta qualidade.
+  - **Código Modular**: O projeto é segmentado em módulos para a interface (`gui.py`), lógica de geração (`script.py`) e parsing de dados (`show_tech.py`), facilitando a manutenção e expansão.
 
 -----
 
-## 🚀 Como Funciona
+## 🏗️ Estrutura do Projeto
 
-O fluxo de trabalho do aplicativo é simples e direto:
+O código foi segmentado em três arquivos principais para melhor organização e escalabilidade:
 
-1.  **Entrada**: Um arquivo de texto contendo a saída completa do comando `show tech-support wireless no-sanitize`.
-2.  **Processamento**: O script Python analisa (`parse`) o arquivo de entrada, usando expressões regulares para encontrar e extrair os dados de configuração relevantes.
-3.  **Saída**: As informações extraídas são inseridas em um template `LLD_Template.docx`, gerando um novo arquivo Word (ex: `LLD_WLC-HOSTNAME.docx`) com todos os campos preenchidos.
+  - **`gui.py`**: O ponto de entrada do aplicativo. Responsável por construir e gerenciar toda a interface gráfica com a qual o usuário interage.
+  - **`script.py`**: Contém a lógica principal para a geração de documentos. Ele é chamado pela GUI, orquestra a coleta de dados e renderiza o template do Word.
+  - **`show_tech.py`**: O "motor" de parsing. Contém a classe `ShowTechWireless`, com todos os métodos e expressões regulares responsáveis por extrair as informações do arquivo de `show tech`.
 
 -----
 
 ## 🛠️ Tecnologias Utilizadas
 
-  - **Python 3.10**
-  - **DocxTemplate (`docxtpl`)**: Para manipulação de templates `.docx` com Jinja2.
+  - **Python 3**
+  - **CustomTkinter**: Para a criação da interface gráfica.
+  - **DocxTemplate (`docxtpl`)**: Para manipulação de templates `.docx`.
   - **Expressões Regulares (`re`)**: Para a extração precisa dos dados.
 
 -----
@@ -67,7 +68,15 @@ Siga os passos abaixo para configurar o ambiente e rodar o projeto.
     ```
 
 3.  **Instale as dependências:**
-   
+    Crie um arquivo chamado `requirements.txt` com o seguinte conteúdo:
+
+    ```
+    customtkinter
+    docxtpl
+    ```
+
+    Em seguida, instale-o:
+
     ```bash
     pip install -r requirements.txt
     ```
@@ -76,45 +85,33 @@ Siga os passos abaixo para configurar o ambiente e rodar o projeto.
 
 ## 🏃 Como Usar
 
-1.  **Obtenha o `show tech`:**
-    Acesse sua controladora Cisco 9800 e execute o comando abaixo para garantir que todas as informações (incluindo as sensíveis, como strings SNMP) sejam coletadas. Salve a saída em um arquivo de texto chamado `show_tech` na raiz do projeto.
-
-    ```
-    show tech-support wireless
-    ```
-
-2.  **Prepare o Template (`LLD_Template.docx`):**
-    Crie um documento Word que servirá como seu template. Nos locais onde você deseja inserir os dados, use a sintaxe Jinja2.
-
-    **Exemplo para uma variável simples:**
-    `O hostname do equipamento é: {{ hostname }}`
-
-    **Exemplo para uma tabela:**
-    | Nome da WLAN | ID | SSID |
-    |:---|:---|:---|
-    |`{% for wlan in wlan_details %}`| | |
-    |`{{ wlan.profile_name }}`|`{{ wlan.id }}`|`{{ wlan.ssid }}`|
-    |`{% endfor %}`| | |
-
-3.  **Execute o Script:**
-    Com o arquivo `show_tech` e o `LLD_Template.docx` na mesma pasta, execute o script:
+1.  **Execute a Interface Gráfica:**
+    Inicie o aplicativo executando o arquivo `gui.py`:
 
     ```bash
-    python script.py
+    python gui.py
     ```
 
-    Um novo arquivo, como `LLD_WLC-SP-01.docx`, será gerado com todas as informações preenchidas.
+2.  **Selecione o Tipo de Equipamento:**
+    Na janela que se abre, escolha "WLC9800" no menu suspenso. Os campos relevantes aparecerão.
+
+3.  **Forneça os Arquivos:**
+
+      - **Arquivo Show Tech**: Clique em "Selecionar..." e navegue até o arquivo de texto com a saída do comando `show tech-support wireless no-sanitize`.
+      - **Arquivo de Template**: Clique em "Selecionar..." e escolha o seu arquivo `LLD_Template.docx` com as tags Jinja2.
+
+4.  **Gere o Documento:**
+    Clique no botão **"Gerar"**. O script irá processar os arquivos e um novo documento, como `AsBuilt_LLD.docx`, será salvo na mesma pasta do projeto.
 
 -----
 
 ## 🔧 Extensibilidade
 
-Adicionar a extração de novas informações é fácil:
+Para adicionar a extração de novas informações de um `show tech` de WLC9800:
 
-1.  **Crie um novo método** na classe `ShowTechWireless` (ex: `get_qos_maps`).
-2.  **Implemente a lógica** de parsing com expressões regulares dentro deste método.
-3.  **Chame o novo método** no bloco `if __name__ == '__main__':` e adicione seu retorno ao dicionário `context`.
-4.  **Atualize seu template** `.docx` para exibir os novos dados.
+1.  **Abra `show_tech.py`**: Crie um novo método na classe `ShowTechWireless` (ex: `get_qos_maps`). Implemente a lógica de parsing com expressões regulares dentro deste método.
+2.  **Abra `script.py`**: Na função `cisco_built_generator`, chame o novo método que você criou e adicione o resultado ao dicionário `context`.
+3.  **Atualize seu Template**: Edite o arquivo `.docx` para exibir os novos dados usando a chave que você adicionou ao `context`.
 
 -----
 
