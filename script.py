@@ -1,8 +1,9 @@
 from show_tech import ShowTechWireless
+from Meraki import GetMerakiConfig
 from docxtpl import DocxTemplate
 
 
-#if __name__ == '__main__':
+
 def cisco_built_generator(show_tech_entry, cisco_template_entry):
     # Carregar dados do arquivo "show tech wireless"
     with open(f'{show_tech_entry}', 'r') as file:
@@ -110,4 +111,35 @@ def cisco_built_generator(show_tech_entry, cisco_template_entry):
     doc_template.render(context)
     doc_template.save('AsBuilt_LLD.docx')
 
-cisco_built_generator('C:/Users/Pedro/Downloads/work/template/show_tech','C:/Users/Pedro/Downloads/work/template/LLD_Template.docx')
+def meraki_built_generator(token, organization_name, template_entry, network_name = ''):
+    # Start
+    report = GetMerakiConfig(token, organization_name)
+
+    #List Network IDs
+    report.get_network_list(network_name)
+    # List of all devices from Network IDs
+    device_list = report.get_devices()
+    # List type of networks
+    report.get_product_types()
+    productType = list(set(report.productType))
+
+    # Get Wireless Settings
+    wireless_settings = report.get_wireless_setting()
+    # Get SSIDs
+    ssids = report.get_ssid()
+
+    ## Generate Document
+    doc_template = DocxTemplate(f'{template_entry}')
+    context = {
+        'productType': productType,
+        'device_list': device_list,
+        'wireless_settings': wireless_settings,
+        'ssids': ssids
+    }
+
+    doc_template.render(context)
+    doc_template.save('Meraki_AsBuilt_LLD.docx')
+
+
+if __name__ == '__main__':
+    meraki_built_generator('2941aade49a4500f2ab56ae425ec9f92e5da23a5', 'Instituto Unibanco','C:\\Users\\pedro.dalcolli\\Downloads\\Netskills\\LLD\\LLD_Template_Meraki.docx')
