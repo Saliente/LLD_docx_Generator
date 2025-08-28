@@ -201,23 +201,3 @@ class GetMerakiConfig:
                 pass
 
         return ssids
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-    report = GetMerakiConfig('2941aade49a4500f2ab56ae425ec9f92e5da23a5', 'JEITTO MEIOS DE PAGAMENTOS LTDA')
-    report.get_network_list()
-    #Get Array devices dictionary
-    device_list = report.get_devices()
-    ssids = report.get_ssid()
-    product = list(set(report.get_product_types()))
-    print(product)
-
-
-
