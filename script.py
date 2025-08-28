@@ -140,6 +140,3 @@ def meraki_built_generator(token, organization_name, template_entry, network_nam
     doc_template.render(context)
     doc_template.save('Meraki_AsBuilt_LLD.docx')
 
-
-if __name__ == '__main__':
-    meraki_built_generator('2941aade49a4500f2ab56ae425ec9f92e5da23a5', 'Instituto Unibanco','C:\\Users\\pedro.dalcolli\\Downloads\\Netskills\\LLD\\LLD_Template_Meraki.docx')
